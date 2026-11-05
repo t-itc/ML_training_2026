@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG Retrieval Instructor Guide</title>
+<style>
+:root{--bg:#f6f7fb;--surface:#fff;--surface-2:#f1f3f9;--ink:#1b1f2e;--ink-2:#4a5068;--ink-3:#6b7189;--line:#e2e5ef;--primary:#4f46e5;--primary-soft:#eef0ff;--amber:#b45309;--amber-soft:#fff6e6;--teal:#0d9488;--violet:#7c3aed;--violet-soft:#f3edff;--shadow:0 1px 2px rgba(20,24,40,.05),0 6px 24px rgba(20,24,40,.06)}
+@media (prefers-color-scheme: dark){:root{--bg:#0f1220;--surface:#171b2c;--surface-2:#1e2337;--ink:#e8eaf3;--ink-2:#b4b9cf;--ink-3:#8f95ae;--line:#2a3049;--primary:#8b8cf8;--primary-soft:#23264a;--amber:#fbbf24;--amber-soft:#3a2d10;--teal:#2dd4bf;--violet:#c4b5fd;--violet-soft:#2a2147;--shadow:none}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:28px 16px 70px}
+a{color:var(--primary)}
+code{font-family:Consolas,Menlo,monospace;font-size:.88em;background:var(--primary-soft);color:var(--primary);padding:.1em .35em;border-radius:5px}
+.hero{background:linear-gradient(135deg,#78350f,#b45309 50%,#4f46e5);color:#fff;border-radius:20px;padding:34px 32px;box-shadow:var(--shadow)}
+.hero h1{margin:.2em 0 .1em;font-size:2.1rem}.hero p{margin:.3em 0;opacity:.95}
+.hero .tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:3px 12px;font-size:.78rem;font-weight:700;letter-spacing:.05em}
+.hero a{color:#fff;font-weight:700}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 26px;margin:22px 0;box-shadow:var(--shadow)}
+h2{font-size:1.3rem;margin:0}
+table{width:100%;border-collapse:collapse;font-size:.94rem;margin-top:10px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}tr.tot td{border-bottom:none}
+.mod{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:16px;padding:20px 26px;margin:18px 0;box-shadow:var(--shadow);break-inside:avoid-page}
+.mh{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.num-b{width:40px;height:40px;border-radius:11px;background:var(--amber-soft);color:var(--amber);display:grid;place-items:center;font-weight:800}
+.time{margin-left:auto;font-size:.8rem;font-weight:700;background:var(--amber-soft);color:var(--amber);border-radius:99px;padding:3px 11px}
+.nb h5{margin:14px 0 4px;font-size:.76rem;text-transform:uppercase;letter-spacing:.07em;color:var(--amber)}
+.nb ul,.nb ol{margin:4px 0;padding-left:22px}.nb li{margin:3px 0}.nb p{margin:.3em 0}
+.opt-pill{display:inline-block;font-size:.68rem;font-weight:800;text-transform:uppercase;background:var(--violet-soft);color:var(--violet);border-radius:99px;padding:1px 8px}
+.shape{font-family:Consolas,monospace;font-size:.75rem;font-weight:800;background:var(--violet-soft);color:var(--violet);border-radius:6px;padding:1px 6px}
+.toc{columns:2;column-gap:28px;padding-left:20px;margin:8px 0 0}
+.top{position:fixed;right:16px;bottom:16px;background:var(--primary);color:#fff;border-radius:99px;padding:8px 14px;text-decoration:none;font-weight:700;box-shadow:var(--shadow)}
+@media (max-width:640px){.toc{columns:1}.hero{padding:26px 20px}.box,.mod{padding:18px 16px}}
+@media print{body{background:#fff}.top{display:none}.mod,.box{box-shadow:none}}
+</style>
+<style>
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark}}
+code,a{overflow-wrap:anywhere} table{table-layout:auto} td{word-break:break-word}
+</style></head><body><div class="wrap" id="top">
+<div class="hero"><span class="tag">🎓 INSTRUCTOR GUIDE · NOT FOR LEARNERS</span><h1>RAG Chunking, Embeddings &amp; Retrieval</h1>
+<p>Delivery plan, talking points, demo steps, discussion questions, coding checkpoints and misconceptions for each module.</p>
+<p>Use with <a href="RAG_Chunking_Embedding_Retrieval.html">RAG_Chunking_Embedding_Retrieval.html</a> (same folder) and the project <code style="background:rgba(255,255,255,.2);color:#fff">RAG_Retrieval/</code>.</p></div>
+
+<div class="box"><h2>⏱️ Delivery plan</h2>
+<table><tr><th>#</th><th>Module</th><th class="num">Minutes</th></tr><tr><td>0</td><td><a href="#m0">Overview & Setup</a></td><td class="num">5</td></tr><tr><td>1</td><td><a href="#m1">Document Chunking Strategies</a></td><td class="num">35</td></tr><tr><td>2</td><td><a href="#m2">Embedding Models</a></td><td class="num">35</td></tr><tr><td>3</td><td><a href="#m3">Retrieval Methods</a></td><td class="num">40</td></tr><tr><td>4</td><td><a href="#m4">Hybrid Search & Reranking</a></td><td class="num">25</td></tr><tr><td>5</td><td><a href="#m5">Evaluation & Recap</a></td><td class="num">15</td></tr><tr class="tot"><td></td><td><strong>Total</strong></td><td class="num"><strong>155</strong></td></tr></table>
+<p style="color:var(--ink-3);font-size:.9rem">155 minutes of content; with a 10–15 minute break and install buffer the session fits 170–180 minutes. If short on time: skip the contextual-retrieval sketch (Module 3), the multi-query demo, and Exercise 3 in Module 4.</p></div>
+
+<div class="box"><h2>🧰 Before class</h2><ul>
+<li>On the teaching machine: <code>pip install -r requirements.txt</code>, then <code>python -m app.main evaluate</code> once — this downloads MiniLM, bge-small and the cross-encoder into the cache. Optionally run <code>compare-models --models minilm mpnet e5-small</code> to cache those too.</li>
+<li>Write down your own <code>evaluate</code> summary lines — you will paste them into the tutorial's results table in Module 5.</li>
+<li>Ollama (optional, multi-query): Ollama app running, <code>$env:OLLAMA_MODEL="mistral"</code>.</li>
+<li>Open the tutorial in a browser; <strong>W</strong> opens the whiteboard, <strong>Alt + ← / →</strong> moves between modules, 🌙 switches theme.</li>
+<li>Remind learners: browser widgets marked <em>Illustrative</em> are teaching simulations; BM25, RRF, chunkers and metric formulas are computed exactly.</li>
+</ul></div>
+
+<section class="mod" id="m0"><div class="mh"><span class="num-b">00</span><h2>Module 0 · Overview & Setup</h2><span class="time">⏱ 5 min</span></div><div class="nb">
+<h5>Objective</h5>
+<p>Connect this module to RAG Fundamentals and make sure every laptop can run the project.</p>
+<h5>Timing</h5>
+<ul><li>2 min — recap: documents → embeddings → cosine → top-K; what breaks at scale</li><li>3 min — dataset tour (20 docs, 12 questions), run <code>python -m pytest -q</code></li></ul>
+<h5>Talking points</h5>
+<ul><li>“Last time six sentences; today the problems real clients have: long documents, codes, synonyms, permissions, and proving improvements.”</li><li>No LangChain today on purpose — once you know the parts, any framework is just packaging.</li></ul>
+<h5>Coding checkpoint</h5>
+<ul><li><code>pytest</code> passes (1 skipped).</li><li>Models were pre-cached with <code>python -m app.main evaluate</code> — do this before class; downloads take minutes.</li></ul>
+<h5>Discussion questions</h5>
+<ul><li>Which client RAG project of yours failed on retrieval rather than on the LLM?</li></ul>
+<h5>Transition</h5>
+<p>“Retrieval can only find what chunking created.”</p>
+</div></section>
+<section class="mod" id="m1"><div class="mh"><span class="num-b">01</span><h2>Module 1 · Document Chunking Strategies</h2><span class="time">⏱ 35 min</span></div><div class="nb">
+<h5>Objective</h5>
+<p>Choose a chunking strategy for a document type and explain the size/overlap/token trade-offs.</p>
+<h5>Timing</h5>
+<ul><li>8 min — why chunking matters; characters vs tokens; silent truncation</li><li>12 min — seven strategies (expand each card; show the handbook examples)</li><li>8 min — simulator: fixed vs recursive at 120 chars, then overlap, then structure and parent-child</li><li>7 min — Python walkthrough (fixed + recursive walkers), run <code>python -m app.main chunk</code></li></ul>
+<h5>Demo instructions</h5>
+<ul><li>Simulator: Method = Fixed, size 120 → find a sentence cut in half. Switch to Recursive. Turn on Compare.</li><li>Switch to Structure: point at the heading-path metadata under each card. Parent-child: one parent → several children.</li><li>Delete the headings in the textarea → structure-based shows the 'needs headings' message (PDF extraction often loses structure).</li><li>In Python, run the token-count snippet: show how <code>VPN-417</code> splits into several tokens.</li></ul>
+<h5>Discussion questions</h5>
+<ul><li>What would you use for a 300-page PDF contract? For WhatsApp-style chat logs?</li><li>Why must the chunking configuration be versioned together with the index?</li><li>When is overlap a bad idea? (duplicates in top-K, cost)</li></ul>
+<h5>Common misconceptions</h5>
+<ul><li>“1 character ≈ 1 token” or a fixed ratio for all languages.</li><li>“Bigger chunks = more context = better retrieval.”</li><li>“Semantic chunking is always best” — it costs an embedding pass and needs tuning.</li></ul>
+<h5>Coding checkpoint</h5>
+<ul><li><code>python -m app.main chunk</code> prints counts and min/avg/max per method; structure chunks show section metadata.</li><li><code>parent-child</code> command prints a matched child and its parent.</li></ul>
+<h5>Transition</h5>
+<p>“Chunks are the units we search — next, how they become vectors.”</p>
+</div></section>
+<section class="mod" id="m2"><div class="mh"><span class="num-b">02</span><h2>Module 2 · Embedding Models</h2><span class="time">⏱ 35 min</span></div><div class="nb">
+<h5>Objective</h5>
+<p>Explain dense vs sparse, normalisation, asymmetric formats, and select an embedding model by criteria and evaluation.</p>
+<h5>Timing</h5>
+<ul><li>8 min — core terms table (stop on symmetric vs asymmetric and prefixes)</li><li>10 min — model comparison table; filter Local/API/Multilingual; latency, cost, governance</li><li>7 min — simulator: pick queries, click points, toggle normalisation</li><li>10 min — Python: EmbeddingModel walker, <code>embed</code> and <code>compare-models</code></li></ul>
+<h5>Demo instructions</h5>
+<ul><li>Simulator: “food abroad” query → FIN-003 top; uncheck Normalise and explain why raw dot products depend on length.</li><li>Run <code>python -m app.main embed</code>: show shape (6, 384), norms 1.0 and the tokenizer output.</li><li>Run <code>compare-models --models minilm bge-small</code>; read per-question lines, not only averages.</li></ul>
+<h5>Discussion questions</h5>
+<ul><li>A client has German and English documents and German users. Which families do you shortlist and how do you decide?</li><li>Data may not leave the network — what changes?</li><li>Two models both output 384 dims — can you mix their vectors?</li></ul>
+<h5>Common misconceptions</h5>
+<ul><li>“More dimensions = better.”</li><li>“Leaderboard #1 will be best for us.”</li><li>“Prefixes are optional decoration.”</li><li>“Cosine 0.8 = 80% relevant.”</li></ul>
+<h5>Coding checkpoint</h5>
+<ul><li><code>embed</code> shows (6, 384) and row norms of 1.0.</li><li><code>compare-models</code> prints a summary per model and the re-indexing reminder.</li></ul>
+<h5>Notes</h5>
+<ul><li>Specs in the table come from model cards / provider docs; check the links before quoting to a client — providers update models and pricing.</li><li>Learners with Ollama already have <code>nomic-embed-text</code> locally — a good bridge to the next session.</li></ul>
+<h5>Transition</h5>
+<p>“Good vectors are half of retrieval. Now: different ways to search.”</p>
+</div></section>
+<section class="mod" id="m3"><div class="mh"><span class="num-b">03</span><h2>Module 3 · Retrieval Methods</h2><span class="time">⏱ 40 min</span></div><div class="nb">
+<h5>Objective</h5>
+<p>Implement dense and BM25 retrieval, apply metadata filters and MMR, and explain multi-query, parent-child and contextual retrieval.</p>
+<h5>Timing</h5>
+<ul><li>12 min — ten method cards (spend most time on BM25, filters, MMR)</li><li>5 min — architecture animation</li><li>10 min — retrieval simulator</li><li>13 min — Python: DenseRetriever walker, BM25/TF-IDF, filters, MMR walker, multi-query</li></ul>
+<h5>Demo instructions</h5>
+<ul><li>Simulator: WFH query → BM25 tokens <em>work, home, policy</em>; VPN-417 → BM25 exact; vacation → dense.</li><li>Set Department = HR with the VPN query: show how filters can hide the answer.</li><li>Python: <code>search --method bm25 --query "What does error VPN-417 mean?"</code>; then <code>--department IT</code>.</li><li><code>mmr</code>: compare λ = 1.0 and 0.5 lists aloud.</li><li>If Ollama runs: <code>multi-query</code>; otherwise pass <code>--variants</code>.</li></ul>
+<h5>Discussion questions</h5>
+<ul><li>Where would you enforce document permissions — prompt, post-filter or pre-filter? Why?</li><li>Which questions in your client domain contain exact identifiers?</li><li>When could MMR hurt?</li></ul>
+<h5>Common misconceptions</h5>
+<ul><li>“BM25 is obsolete because we have embeddings.”</li><li>“Post-filtering is the same as pre-filtering.”</li><li>“Multi-query is free.” (LLM call + N searches)</li></ul>
+<h5>Coding checkpoint</h5>
+<ul><li>BM25 returns IT-004 first for the VPN-417 question.</li><li><code>--department IT</code> returns only IT documents.</li><li><code>mmr</code> prints two different lists.</li></ul>
+<h5>Transition</h5>
+<p>“Dense and BM25 fail in different places — combine them.”</p>
+</div></section>
+<section class="mod" id="m4"><div class="mh"><span class="num-b">04</span><h2>Module 4 · Hybrid Search & Reranking</h2><span class="time">⏱ 25 min</span></div><div class="nb">
+<h5>Objective</h5>
+<p>Fuse rankings with RRF and add a cross-encoder reranker; explain when reranking helps.</p>
+<h5>Timing</h5>
+<ul><li>5 min — WFH example: BM25 misses HR-003 (actual output), dense finds it</li><li>7 min — RRF formula + widget (k = 60, k = 0, real WFH lists)</li><li>5 min — bi-encoder vs cross-encoder, two-stage animation, rerank simulation</li><li>8 min — Python: RRF and Reranker walkers, <code>wfh-demo</code>, <code>rrf-demo</code></li></ul>
+<h5>Demo instructions</h5>
+<ul><li>RRF widget: ask why FIN-001 (in both lists) beats HR-003 (#2 in only one list) — agreement wins.</li><li>Run <code>wfh-demo</code> and read all four lists; then <code>search --method rerank</code>.</li></ul>
+<h5>Discussion questions</h5>
+<ul><li>What latency budget does your client have? How many candidates can you rerank in it?</li><li>When would you choose weighted score fusion over RRF?</li><li>The relevant chunk is #35 in hybrid — can the reranker help with top-20?</li></ul>
+<h5>Common misconceptions</h5>
+<ul><li>“RRF averages scores.” (ranks only)</li><li>“A reranker can find what retrieval missed.”</li><li>“Cross-encoder scores are probabilities.”</li></ul>
+<h5>Coding checkpoint</h5>
+<ul><li><code>rrf-demo</code>: HR-001 = 1/(60+1) + 1/(60+2) = 0.03252.</li><li><code>wfh-demo</code>: BM25 returns only HR-001; hybrid contains HR-001 and HR-003.</li></ul>
+<h5>Transition</h5>
+<p>“Four pipelines — which is better for this client? Measure.”</p>
+</div></section>
+<section class="mod" id="m5"><div class="mh"><span class="num-b">05</span><h2>Module 5 · Evaluation & Recap</h2><span class="time">⏱ 15 min</span></div><div class="nb">
+<h5>Objective</h5>
+<p>Compute P@K, R@K, MRR, nDCG and compare pipelines fairly on the same labelled data.</p>
+<h5>Timing</h5>
+<ul><li>4 min — metric table + calculator</li><li>6 min — run <code>python -m app.main evaluate</code>, paste summary into the results table, discuss per-question differences</li><li>5 min — final quiz + recap + checklist</li></ul>
+<h5>Demo instructions</h5>
+<ul><li>Calculator: mark ranks 2 and 4 relevant, total 2, K = 3 → explain each line of the calculation.</li><li>Evaluation table: BM25 row is a real computation in the browser and should equal the bm25 line from Python.</li><li>Stress that Dense/Hybrid rows in the browser are illustrative and look unrealistically good.</li></ul>
+<h5>Discussion questions</h5>
+<ul><li>How many labelled questions would you need for a client decision? Who labels them?</li><li>Which metric would you put on a dashboard for an HR assistant, and why?</li><li>A method wins on average but loses badly on legal questions — what do you recommend?</li></ul>
+<h5>Common misconceptions</h5>
+<ul><li>“One method is always better.”</li><li>“12 questions are enough to decide.”</li><li>“An unlabelled correct document is a retrieval error.”</li></ul>
+<h5>Coding checkpoint</h5>
+<ul><li><code>evaluate</code> prints per-question ✓ marks and four summary lines; with <code>--save</code> it writes <code>evaluation_results.json</code>.</li></ul>
+<h5>Transition</h5>
+<p>Next session: vector databases and ANN indexes, LLM generation with citations, end-to-end RAG evaluation.</p>
+</div></section>
+</div><a class="top" href="#top">↑ Top</a></body></html>
